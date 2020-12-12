@@ -1,30 +1,24 @@
-﻿<!Doctype html>
+<!Doctype html>
 <html>
     <head>
         <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-  <style>
-      .try
-      {
-          margin-left: 30%;
-      }
-    </style>
+   
 </head>
     <body>
         <input type="file" name="inputfile" id="inputfile"> 
-        <button onclick="myfu()" class="try">Click to change Eng-Frch</button> 
-        <button onclick="myfu1()" class="try">Click to check Replace</button> 
+        <button onclick="myfu()" class="try">Click to change</button> 
+        <button onclick="myfu1()" class="try">Click to check</button> 
+        <button onclick="Export2Doc('exportContent');">Export as .doc</button>
 <div class="row">
 <pre id="output" class="geting col"></pre>
 
-<pre style="display: inline;" class="demo"></pre>
+
+<pre style="display: inline;" id="exportContent" class="demo"></pre>
 </div>
         <script>
- document.getElementById('inputfile') 
+ document.getElementById('inputfile')
             .addEventListener('change', function() { 
               
             var fr=new FileReader(); 
@@ -1054,8 +1048,7 @@ youth:"jeunesse",
             {
                 
            
-               d = c.split(j).join(a[j].fontsize(5).bold().italics().blink());
-                              
+               d = c.split(j).join(a[j].fontsize(5).bold().italics().blink());                              
                c = d;
                
             }
@@ -1088,5 +1081,44 @@ youth:"jeunesse",
     
      
 </script> 
+
+<script>
+  function Export2Doc(element, filename = ''){
+    var preHtml = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Export HTML To Doc</title></head><body>";
+    var postHtml = "</body></html>";
+    var html = preHtml+document.getElementById(element).innerHTML+postHtml;
+
+    var blob = new Blob(['\ufeff', html], {
+        type: 'application/msword'
+    });
+    
+    // Specify link url
+    var url = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(html);
+    
+    // Specify file name
+    filename = filename?filename+'.doc':'document.doc';
+    
+    // Create download link element
+    var downloadLink = document.createElement("a");
+
+    document.body.appendChild(downloadLink);
+    
+    if(navigator.msSaveOrOpenBlob ){
+        navigator.msSaveOrOpenBlob(blob, filename);
+    }else{
+        // Create a link to the file
+        downloadLink.href = url;
+        
+        // Setting the file name
+        downloadLink.download = filename;
+        
+        //triggering the function
+        downloadLink.click();
+    }
+    
+    document.body.removeChild(downloadLink);
+}
+
+  </script>
     </body>
 </html>
